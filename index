@@ -88,25 +88,7 @@
             font-size: 14px;
             line-height: 1.5;
             max-width: 500px;
-            margin: 0 auto 30px auto;
-        }
-        /* Dosya Seçme Alanı Tasarımı */
-        .file-select-box {
-            background: #1a1a1a;
-            border: 1px dashed #333333;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-        }
-        .file-select-box label {
-            display: block;
-            color: #888888;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-        .file-select-box input[type="file"] {
-            color: #888888;
-            font-size: 12px;
+            margin: 0 auto 40px auto;
         }
         .btn-group {
             display: flex;
@@ -188,15 +170,9 @@
             <h2>Sanal 7.1 Ses Alt Sistemi</h2>
             <p>Sistem seslerini gerçek zamanlı katmanlarına ayıran donanım motoru kurulum arayüzü.</p>
 
-            <!-- GÜVENLİ DOSYA SEÇİM ALANI -->
-            <div class="file-select-box">
-                <label>İndirilecek Program Dosyasını Seçin (G432_71_Engine.rar):</label>
-                <input type="file" id="targetFile">
-            </div>
-
             <div class="btn-group">
-                <!-- Güvenli İndirme Butonu -->
-                <button class="ghub-btn" onclick="executeSafeDownload()">🎛️ PROGRAMI İNDİR</button>
+                <!-- 🔗 BUTON DOĞRUDAN DİĞER .HTML SAYFANIZA BAĞLANDI -->
+                <a href="RAR Dosyası.html" class="ghub-btn">🎛️ PROGRAMI İNDİR</a>
                 <button class="ghub-btn secondary" onclick="toggleReadme()">📄 BENİ OKU PANELİ</button>
             </div>
 
@@ -220,13 +196,13 @@ Programın YouTube ve sistem seslerini 7.1 kanallara (Stems) kusursuz
 * Logitech G432 kulaklığınızı seçip "Özellikler" (Properties) deyin.
 * Gelişmiş (Advanced) sekmesinden ses kalitesini kesinlikle:
   "16-bit, 48000 Hz" veya "24-bit, 48000 Hz" (Stüdyo Kalitesi) yapın.
-* Kodun donanıma doğrudan erişebilmesi için Windows'un kendi 
+* Kodun donanıma doğrudan erişebilmesi için Windows'un kendi
   "Uzamsal Ses" (Spatial Audio / Windows Sonic) ayarını KAPATIN.
 
 
 3. 🎛️ PROGRAMI KAPATMA:
 ----------------------------------------------------------------------
-Program arka planda sessizce (siyah ekran olmadan) çalışacak şekilde 
+Program arka planda sessizce (siyah ekran olmadan) çalışacak şekilde
 kodlanmıştır. Programı tamamen kapatmak istediğinizde:
 * Görev Yöneticisi'ni (Task Manager) açın.
 * İşlemler listesinden programın adını bulun ve "Görevi Sonlandır" deyin.
@@ -241,33 +217,7 @@ Gelişmiş 7.1 frekans ayrıştırma motorunun keyfini çıkarın!
         </div>
     </div>
 
-    <!-- TARAYICI GÜVENLİK ENGELLERİNİ AŞAN GÜVENLİ İNDİRME BETİĞİ -->
     <script>
-        function executeSafeDownload() {
-            const fileInput = document.getElementById('targetFile');
-            
-            if (fileInput.files.length === 0) {
-                alert("Lütfen önce gri kutudan indirilmesini istediğiniz program dosyasını (.rar) seçin!");
-                return;
-            }
-
-            const chosenFile = fileInput.files[0];
-            const dataUrlReader = new FileReader();
-
-            // Dosyayı tarayıcı filtresine takılmayacak şekilde Base64 veri dizisine çeviriyoruz
-            dataUrlReader.onload = function(event) {
-                const secureLink = document.createElement('a');
-                secureLink.href = event.target.result;
-                secureLink.download = chosenFile.name;
-                
-                document.body.appendChild(secureLink);
-                secureLink.click();
-                document.body.removeChild(secureLink);
-            };
-
-            dataUrlReader.readAsDataURL(chosenFile);
-        }
-
         function toggleReadme() {
             const readmeBox = document.getElementById("readmeBox");
             if (readmeBox.style.display === "block") {
