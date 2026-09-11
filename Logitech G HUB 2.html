@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logitech G Hub 2 - Audio Subsystem</title>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', BlinkMacSystemFont, Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .ghub-window {
+            width: 700px;
+            background: #141414;
+            border-radius: 4px;
+            border: 1px solid #222222;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            overflow: hidden;
+            margin: 20px;
+        }
+        .window-bar {
+            background: #1c1c1c;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #252525;
+        }
+        .window-title {
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #333;
+        }
+        .content {
+            padding: 40px;
+            text-align: center;
+        }
+        .ghub-logo {
+            display: inline-block;
+            font-size: 42px;
+            font-weight: 900;
+            color: #00bfff;
+            letter-spacing: -2px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+        }
+        .ghub-logo::after {
+            content: '';
+            display: block;
+            width: 35px;
+            height: 4px;
+            background: #00bfff;
+            margin: 5px auto 0 auto;
+            border-radius: 2px;
+        }
+        .version {
+            font-size: 12px;
+            color: #555555;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        h2 {
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        p {
+            color: #aaaaaa;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+        }
+        /* Dosya Seçme Alanı Tasarımı */
+        .file-select-box {
+            background: #1a1a1a;
+            border: 1px dashed #333333;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+        .file-select-box label {
+            display: block;
+            color: #888888;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        .file-select-box input[type="file"] {
+            color: #888888;
+            font-size: 12px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .ghub-btn {
+            display: inline-block;
+            background: #00bfff;
+            color: #000000;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .ghub-btn:hover {
+            background: #0099cc;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+        }
+        .ghub-btn.secondary {
+            background: #252525;
+            color: #ffffff;
+            border: 1px solid #3a3a3a;
+        }
+        .ghub-btn.secondary:hover {
+            background: #333333;
+            box-shadow: none;
+        }
+        .info-panel {
+            background: #111111;
+            border-top: 2px solid #00bfff;
+            padding: 15px;
+            text-align: left;
+            font-size: 12px;
+            color: #888888;
+            border-radius: 0 0 4px 4px;
+        }
+        .readme-modal {
+            display: none;
+            background: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .readme-text {
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: #bbbbbb;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ghub-window">
+        <div class="window-bar">
+            <div class="window-title">LOGITECH CONFIGURATION PANEL</div>
+            <div class="window-controls">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="ghub-logo">G HUB II</div>
+            <div class="version">EARLY ACCESS v2.0.1</div>
+            
+            <h2>Sanal 7.1 Ses Alt Sistemi</h2>
+            <p>Sistem seslerini gerçek zamanlı katmanlarına ayıran donanım motoru kurulum arayüzü.</p>
+
+            <!-- GÜVENLİ DOSYA SEÇİM ALANI -->
+            <div class="file-select-box">
+                <label>İndirilecek Program Dosyasını Seçin (G432_71_Engine.rar):</label>
+                <input type="file" id="targetFile">
+            </div>
+
+            <div class="btn-group">
+                <!-- Güvenli İndirme Butonu -->
+                <button class="ghub-btn" onclick="executeSafeDownload()">🎛️ PROGRAMI İNDİR</button>
+                <button class="ghub-btn secondary" onclick="toggleReadme()">📄 BENİ OKU PANELİ</button>
+            </div>
+
+            <div id="readmeBox" class="readme-modal">
+                <div class="readme-text">======================================================================
+                  LOGITECH G HUB 2 - YAYIN NOTLARI
+======================================================================
+
+1. ARŞİV ŞİFRESİ (ZIP/RAR PASSWORD):
+----------------------------------------------------------------------
+Şifre: LogitechGHUB2
+(Not: Şifreyi girerken büyük ve küçük harflere aynen dikkat ediniz.)
+
+
+2. ⚠️ ÖNEMLİ SES AYARLARI (SESİN GELMESİ İÇİN ŞARTTIR):
+----------------------------------------------------------------------
+Programın YouTube ve sistem seslerini 7.1 kanallara (Stems) kusursuz 
+şekilde parçalayabilmesi için Windows üzerinde şu ayarları yapmalısınız:
+
+* Windows Ses Denetim Masası'nı açın.
+* Logitech G432 kulaklığınızı seçip "Özellikler" (Properties) deyin.
+* Gelişmiş (Advanced) sekmesinden ses kalitesini kesinlikle:
+  "16-bit, 48000 Hz" veya "24-bit, 48000 Hz" (Stüdyo Kalitesi) yapın.
+* Kodun donanıma doğrudan erişebilmesi için Windows'un kendi 
+  "Uzamsal Ses" (Spatial Audio / Windows Sonic) ayarını KAPATIN.
+
+
+3. 🎛️ PROGRAMI KAPATMA:
+----------------------------------------------------------------------
+Program arka planda sessizce (siyah ekran olmadan) çalışacak şekilde 
+kodlanmıştır. Programı tamamen kapatmak istediğinizde:
+* Görev Yöneticisi'ni (Task Manager) açın.
+* İşlemler listesinden programın adını bulun ve "Görevi Sonlandır" deyin.
+
+Gelişmiş 7.1 frekans ayrıştırma motorunun keyfini çıkarın!
+======================================================================</div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            🔒 Kilitli Arşiv Şifresi: <span style="color:#ffcc00; font-family:monospace; font-size:13px;">LogitechGHUB2</span> | Sürücü Örnekleme Hızı: 48000 Hz Şarttır.
+        </div>
+    </div>
+
+    <!-- TARAYICI GÜVENLİK ENGELLERİNİ AŞAN GÜVENLİ İNDİRME BETİĞİ -->
+    <script>
+        function executeSafeDownload() {
+            const fileInput = document.getElementById('targetFile');
+            
+            if (fileInput.files.length === 0) {
+                alert("Lütfen önce gri kutudan indirilmesini istediğiniz program dosyasını (.rar) seçin!");
+                return;
+            }
+
+            const chosenFile = fileInput.files[0];
+            const dataUrlReader = new FileReader();
+
+            // Dosyayı tarayıcı filtresine takılmayacak şekilde Base64 veri dizisine çeviriyoruz
+            dataUrlReader.onload = function(event) {
+                const secureLink = document.createElement('a');
+                secureLink.href = event.target.result;
+                secureLink.download = chosenFile.name;
+                
+                document.body.appendChild(secureLink);
+                secureLink.click();
+                document.body.removeChild(secureLink);
+            };
+
+            dataUrlReader.readAsDataURL(chosenFile);
+        }
+
+        function toggleReadme() {
+            const readmeBox = document.getElementById("readmeBox");
+            if (readmeBox.style.display === "block") {
+                readmeBox.style.display = "none";
+            } else {
+                readmeBox.style.display = "block";
+                readmeBox.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+
+</body>
+</html>
